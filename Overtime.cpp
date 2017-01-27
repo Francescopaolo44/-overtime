@@ -22,7 +22,9 @@ Linguaggio:C*/
 #include <string.h>
 
 //---------------------------structure--------------------------
-
+typedef struct{
+	char name[100],surname[100],date_of_birth[100],residence[100];
+}worker;
 
 
 
@@ -30,16 +32,66 @@ Linguaggio:C*/
 //-------------------------function------------------------------
 
 void DBMS_add(FILE *config){
-	
-	FILE *lista_operai;
-	char dato[100];
+	worker database;
+	FILE *workers_list;
+	char data[100];
+	int i=0,check_load=0,check_exit=0,workers=0,response=1;
 	
 	//open in "a" mode to add workers
-	lista_operai=fopen("database_operai/lista_operai/lista_operai.txt","a");
+	workers_list=fopen("workers_database/workers_list/workers_list.txt","a");
 	
-	//read workers from setting
-	//write information on file
-	fprintf(lista_operai,"----------------------Number of workers: 0----------------------");
+	//open config.ini
+	config=fopen("settings/config.ini","r");
+
+	//read number of workers from setting
+	while(fscanf(config,"%s",data) > 0){
+		if(strcmp("workers:",data) == 0){
+			fscanf(config,"%d",&workers);
+		}
+	}
+	
+	do{
+		if(workers<10){
+			check_load=1;
+		}else{
+			printf("You have reached max number of workers.");
+		}
+		if(check_load==1){
+			fprintf(workers_list,"---------------------------------------\n");
+			
+			printf("Insert worker's name: ");
+			scanf("%s",database.name);
+				
+			fprintf(workers_list,"%s\n",database.name);
+				
+			printf("Insert worker's surname: ");
+			scanf("%s",database.surname);
+				
+			fprintf(workers_list,"%s\n",database.surname);
+				
+			printf("Insert worker's date of birth: ");
+			scanf("%s",database.date_of_birth);
+				
+			fprintf(workers_list,"%s\n",database.date_of_birth);
+				
+			printf("Insert workers' residence: ");
+			scanf("%s",database.residence);
+				
+			fprintf(workers_list,"%s\n",database.residence);
+				
+			workers++;
+			check_load=0;
+		}	
+		printf("Add another workers?:(S=1/N=0) ");
+		scanf("%d",&response);
+	}while(response!=0);
+	
+	//update number of workers 
+	while(fscanf(config,"%s",data) > 0){
+		if(strcmp(data,"workers:") == 0){
+			fprintf(config,"%d",workers);
+		}
+	}
 }
 
 //function that simulate a DBMS (Database Management System) to manage all workers in industry
@@ -64,16 +116,20 @@ void DBMS_menu(){
 		scanf("%s",password);
 		while(fscanf(config,"%s",read_file) > 0){
 			if(strcmp(username,read_file) == 0){
-				printf("\n\nUsername check\n\n");
+				printf("\n\nUsername found\n\n");
 				for(i=0;i<3;i++){
 					fscanf(config,"%s",read_file);
 					if(strcmp(password,read_file) == 0){
-						printf("\n\nPassword Check\n\n");
+						printf("\n\nPassword found\n\n");
 						check_data=1;
 					}
 				}
 			}
-		}	
+		}
+		
+		//close config.ini
+		fclose(config);
+			
 		if(check_data!=1){
 			printf("\nUsername or password is incorrect.");
 		}else{
@@ -83,9 +139,8 @@ void DBMS_menu(){
 				printf("\nWelcome Admin\n\n");
 				printf("\nChoose an action: \n");
 				printf("|1)Add Workers      |\n");
-				printf("|2)Delete Workers   |\n");
-				printf("|3)Search Workers   |\n");
-				printf("|4)Print  Workers   |\n");	
+				printf("|2)Search Workers   |\n");
+				printf("|3)Print  Workers   |\n");	
 				printf("\nInsert action: ");
 				scanf("%d",&risposta);
 				
