@@ -72,15 +72,15 @@ void DBMS_add(FILE *config){
 			//id
 			fprintf(workers_list,"%d\n",database.id);
 			
-			printf("Insert worker's name: ");
-			scanf("%s",database.name);
-			//name	
-			fprintf(workers_list,"%s\n",database.name);
-				
 			printf("Insert worker's surname: ");
 			scanf("%s",database.surname);
 			//surname	
 			fprintf(workers_list,"%s\n",database.surname);
+			
+			printf("Insert worker's name: ");
+			scanf("%s",database.name);
+			//name	
+			fprintf(workers_list,"%s\n",database.name);
 				
 			printf("Insert worker's date of birth: ");
 			scanf("%s",database.date_of_birth);
@@ -113,8 +113,35 @@ void DBMS_add(FILE *config){
 }
 
 //function that search a user
-void DBMS_search(FILE *config){
+void DBMS_search(){
+	char surname[100],read_from[100];
+	int i,check_workers=0;
+	FILE *workers_list;
 	
+	//open in "r" mode to read workers
+	workers_list=fopen("workers_database/workers_list/workers_list.txt","r");
+	
+	if(workers_list == NULL){
+		printf("You have never added a workers to database");
+	}else{
+		printf("Insert workers surname: ");
+		scanf("%s",surname);
+		while(fscanf(workers_list,"%s",read_from) > 0){
+			if(strcmp(surname,read_from) == 0){
+				printf("\nWorker's data\n");
+				for(i=0;i<3;i++){
+					fscanf(workers_list,"%s",read_from);
+					printf("\n%s\n",read_from);
+					check_workers=1;
+				}
+			}
+		}
+		if(check_workers==0){
+			printf("\nThere'isnt workers with this surname");
+		}
+	}
+	//close file
+	fclose(workers_list);
 }
 //function that simulate a DBMS (Database Management System) to manage all workers in industry
 void DBMS_menu(){
@@ -171,7 +198,7 @@ void DBMS_menu(){
 					case 1: DBMS_add(config);
 					break;
 					
-					case 2:DBMS_search(config);
+					case 2:DBMS_search();
 					break;
 					
 					default: "wrong action";
