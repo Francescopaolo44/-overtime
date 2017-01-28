@@ -30,18 +30,25 @@ typedef struct{
 
 
 
-//-------------------------function------------------------------
+//-------------------------function-----------------------------------------
 
 //-------------------------DBMS---------------------------------------------
 //function that add a new workers to "database"
 void DBMS_add(FILE *config){
 	worker database;
+	
+	//worker's database file 
 	FILE *workers_list;
-	char data[100];
-	int i=0,check_load=0,check_exit=0,workers=0,response=1;
+	
+	//worker's badge file
+	FILE *workers_badge;
+	
+	char data[100],complex_path[100];
+	int i=0,check_load=0,check_exit=0;
+	int workers=0,response=1;
 	long int position=0;
 	
-	//set id to 0
+	//set autoincrement id to 0
 	database.id=0;
 	
 	//open in "a" mode to add workers
@@ -70,9 +77,15 @@ void DBMS_add(FILE *config){
 		if(check_load==1){
 			//divider
 			fprintf(workers_list,"---------------------------------------\n");
+			
 			//id
 			fprintf(workers_list,"%d\n",database.id);
 			
+			//------------create badge file for all workers in DB by ID--------
+			sprintf(complex_path,"workers_database/work_hours/%d.txt",database.id);
+			workers_badge=fopen(complex_path,"w");
+			//-------------------------------------------------------------------
+			 
 			printf("Insert worker's surname: ");
 			scanf("%s",database.surname);
 			//surname	
@@ -231,16 +244,16 @@ void DBMS_menu(){
 		}
 	}
 }
-//-------------------------END DBMS-----------------------------------
+//-------------------------END DBMS-----------------------------------------------
 
-//-------------------------BADGE--------------------------------------
+//-------------------------BADGE--------------------------------------------------
 void Badge_entrance(){
 	
 }
 
 //function that simulate a Electronic Badge
 void Badge_menu(){
-	int scelta=1;
+	int scelta=1,risposta;
 	
 	while(scelta!=0){
 		//clean screen
