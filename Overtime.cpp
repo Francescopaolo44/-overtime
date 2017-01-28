@@ -32,6 +32,7 @@ typedef struct{
 
 //-------------------------function------------------------------
 
+//-------------------------DBMS---------------------------------------------
 //function that add a new workers to "database"
 void DBMS_add(FILE *config){
 	worker database;
@@ -226,11 +227,48 @@ void DBMS_menu(){
 				}
 				printf("\n\nContinue with DBMS?:(S=1/N=0) ");
 				scanf("%d",&scelta);
-				system("cls");
 			}
 		}
 	}
 }
+//-------------------------END DBMS-----------------------------------
+
+//-------------------------BADGE--------------------------------------
+void Badge_entrance(){
+	
+}
+
+//function that simulate a Electronic Badge
+void Badge_menu(){
+	int scelta=1;
+	
+	while(scelta!=0){
+		//clean screen
+		system("cls");
+		printf("\nWelcome Worker\n\n");
+		printf("\nChoose an action: \n");
+		printf("|1)Badge Entrance         |\n");
+		printf("|2)Badge Exit       	  |\n");
+		printf("|3)Print  Workers Badge   |\n");	
+		printf("\nInsert action: ");
+		scanf("%d",&risposta);
+				
+		switch (risposta){
+				
+			case 1: Badge_entrance();
+					break;
+					
+			default: "wrong action";
+		}
+		printf("\n\nContinue with DBMS?:(S=1/N=0) ");
+		scanf("%d",&scelta);
+	}
+}
+
+
+
+
+
 
 void menu (){
 	
@@ -252,6 +290,9 @@ void menu (){
 		switch (risposta){
 		
 			case 1: DBMS_menu();
+			break;
+			
+			case 2: Badge_menu();
 			break;
 			
 			default: "wrong action";
