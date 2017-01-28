@@ -21,6 +21,9 @@ Linguaggio:C*/
 #include <stdio.h>
 #include <string.h>
 
+//---------------------------constant--------------------------
+#define number_of_workers = 10;
+#define days_of_works = 20;
 //---------------------------structure--------------------------
 typedef struct{
 	int id; /*AUTO INCREMENT */
@@ -48,8 +51,6 @@ void DBMS_add(FILE *config){
 	int workers=0,response=1;
 	long int position=0;
 	
-	//set autoincrement id to 0
-	database.id=0;
 	
 	//open in "a" mode to add workers
 	workers_list=fopen("workers_database/workers_list/workers_list.txt","a");
@@ -65,11 +66,14 @@ void DBMS_add(FILE *config){
 		}
 	}
 	
+	//set autoincrement id to default value of settings.ini
+	database.id = workers;
+	
 	//close config
 	fclose(config);
 	
 	do{
-		if(workers<10){
+		if(workers<number_of_workers){
 			check_load=1;
 		}else{
 			printf("You have reached max number of workers.");
@@ -82,8 +86,12 @@ void DBMS_add(FILE *config){
 			fprintf(workers_list,"%d\n",database.id);
 			
 			//------------create badge file for all workers in DB by ID--------
+			//create file path with string concatenation of int and string
 			sprintf(complex_path,"workers_database/work_hours/%d.txt",database.id);
 			workers_badge=fopen(complex_path,"w");
+			//initialize worker's day;
+			fprintf(workers_badge,"Worker's day: 0");
+			fclose(workers_badge);
 			//-------------------------------------------------------------------
 			 
 			printf("Insert worker's surname: ");
@@ -96,8 +104,12 @@ void DBMS_add(FILE *config){
 			//name	
 			fprintf(workers_list,"%s\n",database.name);
 				
-			printf("Insert worker's date of birth: ");
-			scanf("%s",database.date_of_birth);
+			printf("Insert worker's date of birth: [gg mm aa] ");
+			
+			//empty get for send button
+			getchar();
+			
+			gets(database.date_of_birth);
 			//date of birthday	
 			fprintf(workers_list,"%s\n",database.date_of_birth);
 				
@@ -116,7 +128,7 @@ void DBMS_add(FILE *config){
 	
 	//open config.ini
 	config=fopen("settings/config.ini","r+");
-	
+	//move near number
 	fseek(config,94,0);
 	//update
 	fprintf(config,"%d\b",workers);
@@ -143,7 +155,7 @@ void DBMS_search(){
 		while(fscanf(workers_list,"%s",read_from) > 0){
 			if(strcmp(surname,read_from) == 0){
 				printf("\nWorker's data\n");
-				for(i=0;i<3;i++){
+				for(i=0;i<5;i++){
 					fscanf(workers_list,"%s",read_from);
 					printf("\n%s\n",read_from);
 					check_workers=1;
@@ -197,11 +209,9 @@ void DBMS_menu(){
 		scanf("%s",password);
 		while(fscanf(config,"%s",read_file) > 0){
 			if(strcmp(username,read_file) == 0){
-				printf("\n\nUsername found\n\n");
 				for(i=0;i<3;i++){
 					fscanf(config,"%s",read_file);
 					if(strcmp(password,read_file) == 0){
-						printf("\n\nPassword found\n\n");
 						check_data=1;
 					}
 				}
@@ -248,7 +258,34 @@ void DBMS_menu(){
 
 //-------------------------BADGE--------------------------------------------------
 void Badge_entrance(){
+	int id,day;
+	char complex_path[100],entrance[100],read_day[100];
 	
+	FILE *workers_badge;
+	
+	printf("Inserisci id badge: ");
+	scanf("%d",&id);
+	sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
+	
+	//open badge file
+	workers_badge=fopen(complex_path,"r+");
+	
+	//read worker's day
+	fseek(workers_badge,14,0);
+	fscanf(workers_badge,"%d",&day);
+	
+	if(workers_badge == NULL){
+		printf("\nFile doesn't exist.Have you ever add this worker in the database?");
+	}else{
+		if(day < days_of_works){
+			printf("Insert Entrance Hour: [hh mm]");
+			//empty get for send button
+			getchar();
+			gets(entrance);
+			fprintf(workers_badge,"%s",entrance);
+			fprintf(workers_badge,"/");
+		}
+	}
 }
 
 //function that simulate a Electronic Badge
