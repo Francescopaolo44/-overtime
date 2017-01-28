@@ -143,6 +143,24 @@ void DBMS_search(){
 	//close file
 	fclose(workers_list);
 }
+
+//function that print all workers
+void DBMS_print(){
+	FILE *workers_list;
+	char workers[100];
+	
+	//open in "r" mode to read workers
+	workers_list=fopen("workers_database/workers_list/workers_list.txt","r");
+	
+	if(workers_list == NULL){
+		printf("You have never added a workers to database");
+	}else{
+		while(fscanf(workers_list,"%s",workers) > 0){
+			printf("%s\n",workers);
+		}
+	}
+}
+
 //function that simulate a DBMS (Database Management System) to manage all workers in industry
 void DBMS_menu(){
 	
@@ -199,6 +217,9 @@ void DBMS_menu(){
 					break;
 					
 					case 2:DBMS_search();
+					break;
+					
+					case 3:DBMS_print();
 					break;
 					
 					default: "wrong action";
