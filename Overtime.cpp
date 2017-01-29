@@ -91,7 +91,7 @@ void DBMS_add(FILE *config){
 			sprintf(complex_path,"workers_database/work_hours/%d.txt",database.id);
 			workers_badge=fopen(complex_path,"w");
 			//initialize worker's day;
-			fprintf(workers_badge,"Worker's day: 0");
+			fprintf(workers_badge,"Worker's day: 1");
 			fclose(workers_badge);
 			//-------------------------------------------------------------------
 			 
@@ -130,7 +130,7 @@ void DBMS_add(FILE *config){
 	//open config.ini
 	config=fopen("settings/config.ini","r+");
 	//move near number
-	fseek(config,94,0);
+	fseek(config,93,0);
 	//update
 	fprintf(config,"%d\b",workers);
 	fprintf(config,"\n");
@@ -241,10 +241,10 @@ void DBMS_menu(){
 					case 1: DBMS_add(config);
 					break;
 					
-					case 2:DBMS_search();
+					case 2: DBMS_search();
 					break;
 					
-					case 3:DBMS_print();
+					case 3: DBMS_print();
 					break;
 					
 					default: "wrong action";
@@ -258,9 +258,10 @@ void DBMS_menu(){
 //-------------------------END DBMS-----------------------------------------------
 
 //-------------------------BADGE--------------------------------------------------
-void Badge_entrance(){
-	int id,day,check_day=0;
-	char complex_path[100],entrance[100],read_day[100];
+void Badge(){
+	int id,day=0,check_day=0;
+	char complex_path[100],read_day[100];
+	float entrance=0,exit=0;
 	
 	FILE *workers_badge;
 	
@@ -275,14 +276,14 @@ void Badge_entrance(){
 	fseek(workers_badge,14,0);
 	fscanf(workers_badge,"%d",&day);
 	
-	fclose(workers_badge);
-	
-	//open file for appendin hour and update day
-	workers_badge=fopen(complex_path,"a");
-	
 	if(workers_badge == NULL){
 		printf("\nFile doesn't exist.Have you ever add this worker in the database?");
 	}else{
+		//close file in 'r' mode"
+		fclose(workers_badge);
+		
+		//open file for appendin hour and update day
+		workers_badge=fopen(complex_path,"a");
 		
 		if(day < days_of_works){
 		
@@ -308,13 +309,24 @@ void Badge_entrance(){
 				fprintf(workers_badge,"\n\nDomenica:-");
 			}
 			if(check_day==1){
-				printf("Insert Entrance Hour: [hh mm]");
-				//empty get for send button
-				getchar();
-				gets(entrance);
-				//print entrance
-				fprintf(workers_badge,"%s",entrance);
-				fprintf(workers_badge,"/");
+				//set green				
+				system("color 2F");
+				
+				//entrance
+				printf("Insert Entrance Hour: [hh.mm]");
+				scanf("%f",&entrance);
+				
+				//set red				
+				system("color 4F");
+				
+				//exit
+				printf("Insert Exit Hour: [hh.mm]");
+				scanf("%f",&exit);
+				
+				//print entrance and exit
+				fprintf(workers_badge,"%0.2f",entrance);
+				fprintf(workers_badge," / ");
+				fprintf(workers_badge,"%0.2f",exit);
 				day++;
 			}else{
 				printf("Weekend man!");
@@ -334,6 +346,9 @@ void Badge_entrance(){
 	
 	//close badge in append mode
 	fclose(workers_badge);
+	
+	//set default				
+	system("color 3F");
 }
 
 //function that simulate a Electronic Badge
@@ -345,15 +360,14 @@ void Badge_menu(){
 		system("cls");
 		printf("\nWelcome Worker\n\n");
 		printf("\nChoose an action: \n");
-		printf("|1)Badge Entrance         |\n");
-		printf("|2)Badge Exit       	  |\n");
-		printf("|3)Print  Workers Badge   |\n");	
+		printf("|1)Badge |\n");
+		printf("|2)Print  Workers Badge  |\n");	
 		printf("\nInsert action: ");
 		scanf("%d",&risposta);
 				
 		switch (risposta){
 				
-			case 1: Badge_entrance();
+			case 1: Badge();
 					break;
 					
 			default: "wrong action";
