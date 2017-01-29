@@ -255,11 +255,23 @@ void DBMS_menu(){
 //-------------------------END DBMS-----------------------------------------------
 
 //-------------------------BADGE--------------------------------------------------
+//function that transform entrance and exit value in minute of work
+int calculate_minute_work (int entrance_H){
+	int minute=0;
+	
+	//calculate minute
+	minute = entrance_H * 60;
+	
+	return minute;
+}
+
+//function that to specific id file entrance and exit
 void Badge(){
 	int id,day=0,check_day=0;
 	char complex_path[100],read_day[100];
 	char check_entrance=0,check_exit=0;
 	int entrance_H=0,entrance_M=0,exit_H=0,exit_M=0;
+	int total_m_entrance=0,total_m_exit=0,minute_H=0,total_m=0;
 	
 	FILE *workers_badge;
 	
@@ -348,6 +360,11 @@ void Badge(){
 					
 				}while(check_entrance!=1 && check_exit!=1);
 				
+				//transformation from hour to minute
+				minute_H = calculate_minute_work(entrance_H);
+				//total
+				total_m_entrance = minute_H+ entrance_M;
+				
 				//print entrance
 				fprintf(workers_badge,"%d",entrance_H);
 				fprintf(workers_badge,".");
@@ -358,10 +375,22 @@ void Badge(){
 				fprintf(workers_badge,"/");
 				fprintf(workers_badge," ");		
 				
+				//transformation from hour to minute
+				minute_H = calculate_minute_work(exit_H);
+				//total
+				total_m_exit = minute_H+ exit_M;
+				
 				//print exit
 				fprintf(workers_badge,"%d",exit_H);
 				fprintf(workers_badge,".");
 				fprintf(workers_badge,"%d\n",exit_M);
+				
+				//calculate total of minute
+				total_m = total_m_exit + total_m_entrance;
+				
+				//print minute of work
+				fprintf(workers_badge,"Minute of work: ");
+				fprintf(workers_badge,"%d\n",total_m);
 				
 				day++;
 				
@@ -443,7 +472,51 @@ void Badge_menu(){
 
 //overtime of all workers
 void Overtime_all(){
+	int workers=0,i,e,skip,id=0,workers_days=0;
+	float entrance=0,exit=0;
+	char complex_path[100],garbage[100];
+	//load worker 
+	FILE *workers_hour;
 	
+	//load config.ini
+	FILE *config;
+	
+	//open config.ini
+	config = fopen("settings/config.ini","r");
+			
+	if(config == NULL){
+		printf("\nOps....you delete or move config.ini file. Please restart the program in the same folder of settings/config.ini");
+	}else{
+		//read number of workers
+		fseek(config,93,0);
+		fscanf(config,"%d",&workers);
+		
+		//close config
+		fclose(config);
+		
+		//open correct file for each workers
+		for(i=0;i<workers;i++){
+			//open workers_hours
+			sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
+	
+			//open badge file fo read
+			workers_hour=fopen(complex_path,"r");
+			
+			//read worker days
+			fseek(workers_hour,14,0);
+			fscanf(workers_hour,"%d",&workers_days);
+		
+			//close workers_hour
+			fclose(workers_hour);
+			
+			//open badge file fo read
+			workers_hour=fopen(complex_path,"r");
+			
+			for(e=0;e<workers_days;e++){
+				
+			}
+		}
+	}
 }
 
 
