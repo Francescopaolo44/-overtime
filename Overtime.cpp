@@ -31,9 +31,6 @@ typedef struct{
 	char name[100],surname[100],date_of_birth[100],residence[100];
 }worker;
 
-
-
-
 //-------------------------function-----------------------------------------
 
 //-------------------------DBMS---------------------------------------------
@@ -327,6 +324,8 @@ void Badge(){
 					//check right hour
 					if(entrance_H>=0 && entrance_H<=23){
 						check_entrance=1;
+					}else{
+						printf("Invalid hour");
 					}
 					
 					//set red				
@@ -343,8 +342,11 @@ void Badge(){
 					//check right hour
 					if(exit_H>=0 && entrance_M<=59){
 						check_exit=1;
+					}else{
+						printf("invalid minute");
 					}
-				}while(check_entrance==0 && check_exit==0);
+					
+				}while(check_entrance!=1 && check_exit!=1);
 				
 				//print entrance
 				fprintf(workers_badge,"%d",entrance_H);
@@ -362,6 +364,7 @@ void Badge(){
 				fprintf(workers_badge,"%d\n",exit_M);
 				
 				day++;
+				
 			}else{
 				printf("Weekend man!");
 				day++;
