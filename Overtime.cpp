@@ -322,10 +322,10 @@ void Badge(){
 					scanf("%d",&entrance_M);
 					
 					//check right hour
-					if(entrance_H>=0 && entrance_H<=23){
+					if(entrance_H>=0 && entrance_H<=23 && entrance_M>=0 && entrance_M<=59){
 						check_entrance=1;
 					}else{
-						printf("Invalid hour");
+						printf("Invalid hour\n");
 					}
 					
 					//set red				
@@ -340,10 +340,10 @@ void Badge(){
 					scanf("%d",&exit_M);
 					
 					//check right hour
-					if(exit_H>=0 && entrance_M<=59){
+					if(exit_H>=0 && exit_H<=23 && exit_M>=0 && exit_M<=59){
 						check_exit=1;
 					}else{
-						printf("invalid minute");
+						printf("invalid minute\n");
 					}
 					
 				}while(check_entrance!=1 && check_exit!=1);
@@ -406,13 +406,13 @@ void Badge_print(){
 		printf("\nFile doesn't exist.Have you ever add this worker in the database?");
 	}else{
 		while(fscanf(workers_badge,"%s",read_hour) > 0){
-			printf("%s",read_hour);
+			printf("%s\n",read_hour);
 		}
 	}
 	
 }
 
-//function that simulate a Electronic Badge
+//function that simulate an Electronic Badge
 void Badge_menu(){
 	int scelta=1,risposta;
 	
@@ -441,6 +441,43 @@ void Badge_menu(){
 	}
 }
 
+//overtime of all workers
+void Overtime_all(){
+	
+}
+
+
+
+
+
+
+
+
+//function that calculate overtime of workers{the main program}
+void Overtime_menu(){
+	int scelta=1,risposta;
+	
+	while(scelta!=0){
+		//clean screen
+		system("cls");
+		printf("\nWelcome Worker\n\n");
+		printf("\nChoose an action: \n");
+		printf("|1)Overtime [ALL] workers       |\n");
+		printf("|2)Overtime [SPECIFIC] workers  |\n");	
+		printf("\nInsert action: ");
+		scanf("%d",&risposta);
+				
+		switch (risposta){
+				
+			case 1: Overtime_all();
+					break;
+					
+			default: "wrong action";
+		}
+		printf("\n\nContinue with Badge?:(S=1/N=0) ");
+		scanf("%d",&scelta);
+	}
+}
 
 
 
@@ -471,11 +508,19 @@ void menu (){
 			case 2: Badge_menu();
 			break;
 			
+			case 3: Overtime_menu();
+			break;
+			
 			default: "wrong action";
 		}
 		printf("\n\nContinue with Menu?:(S=1/N=0) ");
 		scanf("%d",&scelta);
 	}
+}
+
+//launch screen
+void launch_screen(){
+	
 }
 //---------------------------main--------------------------------
 int main(){
@@ -483,7 +528,9 @@ int main(){
 	//initialize design
 	system("color 3F");
 	system("title Overtime Project by D.F.P");
-	printf("Welcome to Overtime Software");
+
+	//loading screen
+	launch_screen();
 	
 	//call menu
 	menu();
