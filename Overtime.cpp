@@ -88,7 +88,7 @@ void DBMS_add(FILE *config){
 			sprintf(complex_path,"workers_database/work_hours/%d.txt",database.id);
 			workers_badge=fopen(complex_path,"w");
 			//initialize worker's day;
-			fprintf(workers_badge,"Worker's day: 1");
+			fprintf(workers_badge,"Worker's day: 1\n");
 			fclose(workers_badge);
 			//-------------------------------------------------------------------
 			 
@@ -316,7 +316,8 @@ void Badge(){
 			}else if(day == 6 || day == 13 || day == 20 || day == 27){
 				fprintf(workers_badge,"\n\nSabato:-");
 			}else{
-				fprintf(workers_badge,"\n\nDomenica:-");
+				fprintf(workers_badge,"\n\nDomenica:-\n");
+				fprintf(workers_badge,"------------------------------------------------");
 			}
 			if(check_day==1){
 				

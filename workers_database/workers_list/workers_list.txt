@@ -2,11 +2,5 @@
 0
 Dellaquila
 Paolo
-04 03 199
-Barletta
----------------------------------------
-1
-Dellaquila
-Michele
-23 02 2003
+04 03 1999
 Barletta
