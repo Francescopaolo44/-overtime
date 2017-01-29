@@ -3,7 +3,7 @@
 /*realizzare un porgramma che:
 calcoli le ore di straordinario effettuate dai 10 dipendenti dell'azienda Creasis.
 I dipendenti sono tenuti a lavorare 40 ore settimanali in 5 giorni (DA LUNEDI A VENERDI) e ogni giorno badgiano all'entrata e all'uscita.
-Alla fine del mese(di 30 giorni)l'ufficio delle risorse umane, deve sapere quanto ore di straordinario deve pagare a ciascun dipendente.
+Alla fine del mese(di 28 giorni)l'ufficio delle risorse umane, deve sapere quanto ore di straordinario deve pagare a ciascun dipendente.
 
 Tesina
 
@@ -24,6 +24,7 @@ Linguaggio:C*/
 //---------------------------constant--------------------------
 const int number_of_workers = 10;
 const int days_of_works = 29;
+const int compulsory_hours = 40;
 
 //---------------------------structure--------------------------
 typedef struct{
@@ -264,7 +265,15 @@ int calculate_minute_work (int entrance_H){
 	
 	return minute;
 }
-
+//function that transform minute value in hour
+int calculate_hour_work (int minute){
+	int hour=0;
+	
+	//calculate hour
+	hour = minute / 60;
+	
+	return hour;
+}
 //function that to specific id file entrance and exit
 void Badge(){
 	int id,day=0,check_day=0;
@@ -473,7 +482,8 @@ void Badge_menu(){
 //overtime of all workers
 void Overtime_all(){
 	int workers=0,i,e,week=0,id=0,workers_days=0;
-	int minute=0,total=0,total_minute[4];
+	int minute=0,total=0,total_minute[4],overtime=0;
+	int compulsory=0,extra=0,extra_hour=0;
 	char complex_path[100],garbage[100];
 	//load worker 
 	FILE *workers_hour;
@@ -540,14 +550,26 @@ void Overtime_all(){
 					total+=minute;
 					if(e==4 || e==11 || e==18 || e==25){
 						total_minute[week]=total;
+						printf("%d\n",total_minute[week]);
 						total=0;
 						week++;
 					}
 				}							
 			}
-		}
-		for(week=0;week<4;week++){
-			printf("%d\n",total_minute[week]);
+			for(week=0;week<4;week++){
+				overtime += total_minute[week];
+			}
+			compulsory = calculate_minute_work(compulsory_hours);
+			//check overtime
+			if(overtime < compulsory){
+				printf("This workers, work fewer hours than 40.");
+			}else if(overtime == compulsory){
+				printf("This workers, work 40 hours.");
+			}else{
+				extra = overtime - compulsory;
+				extra_hour = calculate_hour_work(extra);
+				printf("You must pay %d hour of overtime.",extra_hour);
+			}
 		}
 	}
 }
@@ -561,8 +583,7 @@ void Overtime_menu(){
 		system("cls");
 		printf("\nWelcome Worker\n\n");
 		printf("\nChoose an action: \n");
-		printf("|1)Overtime [ALL] workers       |\n");
-		printf("|2)Overtime [SPECIFIC] workers  |\n");	
+		printf("|1)Overtime [ALL] workers |\n");
 		printf("\nInsert action: ");
 		scanf("%d",&risposta);
 				
@@ -573,7 +594,7 @@ void Overtime_menu(){
 					
 			default: printf("wrong action");
 		}
-		printf("\n\nContinue with Badge?:(S=1/N=0) ");
+		printf("\n\nContinue with Overtime?:(S=1/N=0) ");
 		scanf("%d",&scelta);
 	}
 }
