@@ -23,7 +23,7 @@ Linguaggio:C*/
 
 //---------------------------constant--------------------------
 const int number_of_workers = 10;
-const int days_of_works = 28;
+const int days_of_works = 29;
 
 //---------------------------structure--------------------------
 typedef struct{
@@ -244,7 +244,7 @@ void DBMS_menu(){
 					case 3: DBMS_print();
 					break;
 					
-					default: "wrong action";
+					default: printf("wrong action");
 				}
 				printf("\n\nContinue with DBMS?:(S=1/N=0) ");
 				scanf("%d",&scelta);
@@ -336,7 +336,7 @@ void Badge(){
 					scanf("%d",&exit_H);
 					
 					//exit minute
-					printf("Insert Exit Hour: [mm]");
+					printf("Insert Exit Minute: [mm]");
 					scanf("%d",&exit_M);
 					
 					//check right hour
@@ -414,7 +414,7 @@ void Badge_print(){
 
 //function that simulate an Electronic Badge
 void Badge_menu(){
-	int scelta=1,risposta;
+	int scelta=1,risposta=0;
 	
 	while(scelta!=0){
 		//clean screen
@@ -434,7 +434,7 @@ void Badge_menu(){
 			case 2: Badge_print();
 					break;
 					
-			default: "wrong action";
+			default: printf("wrong action");
 		}
 		printf("\n\nContinue with Badge?:(S=1/N=0) ");
 		scanf("%d",&scelta);
@@ -472,7 +472,7 @@ void Overtime_menu(){
 			case 1: Overtime_all();
 					break;
 					
-			default: "wrong action";
+			default: printf("wrong action");
 		}
 		printf("\n\nContinue with Badge?:(S=1/N=0) ");
 		scanf("%d",&scelta);
@@ -511,7 +511,7 @@ void menu (){
 			case 3: Overtime_menu();
 			break;
 			
-			default: "wrong action";
+			default: printf("wrong action");
 		}
 		printf("\n\nContinue with Menu?:(S=1/N=0) ");
 		scanf("%d",&scelta);
