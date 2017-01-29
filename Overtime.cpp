@@ -472,8 +472,8 @@ void Badge_menu(){
 
 //overtime of all workers
 void Overtime_all(){
-	int workers=0,i,e,id=0,workers_days=0;
-	int minute=0;
+	int workers=0,i,e,week=0,id=0,workers_days=0;
+	int minute=0,total=0,total_minute[4];
 	char complex_path[100],garbage[100];
 	//load worker 
 	FILE *workers_hour;
@@ -537,9 +537,17 @@ void Overtime_all(){
 					//---------parser finish
 					//get total minute value
 					fscanf(workers_hour,"%d",&minute);
-					printf("%d\n",minute);	
+					total+=minute;
+					if(e==4 || e==11 || e==18 || e==25){
+						total_minute[week]=total;
+						total=0;
+						week++;
+					}
 				}							
 			}
+		}
+		for(week=0;week<4;week++){
+			printf("%d\n",total_minute[week]);
 		}
 	}
 }
