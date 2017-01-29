@@ -317,7 +317,6 @@ void Badge(){
 				fprintf(workers_badge,"\n\nSabato:-");
 			}else{
 				fprintf(workers_badge,"\n\nDomenica:-\n");
-				fprintf(workers_badge,"------------------------------------------------");
 			}
 			if(check_day==1){
 				
@@ -335,7 +334,7 @@ void Badge(){
 					scanf("%d",&entrance_M);
 					
 					//check right hour
-					if(entrance_H>=0 && entrance_H<=23 && entrance_M>=0 && entrance_M<=59){
+					if((entrance_H>=0 && entrance_H<=23) && (entrance_M>=0 && entrance_M<=59)){
 						check_entrance=1;
 					}else{
 						printf("Invalid hour\n");
@@ -353,7 +352,7 @@ void Badge(){
 					scanf("%d",&exit_M);
 					
 					//check right hour
-					if(exit_H>=0 && exit_H<=23 && exit_M>=0 && exit_M<=59){
+					if((exit_H>=0 && exit_H<=23) && (exit_M>=0 && exit_M<=59)){
 						check_exit=1;
 					}else{
 						printf("invalid minute\n");
@@ -473,8 +472,8 @@ void Badge_menu(){
 
 //overtime of all workers
 void Overtime_all(){
-	int workers=0,i,e,skip,id=0,workers_days=0;
-	float entrance=0,exit=0;
+	int workers=0,i,e,id=0,workers_days=0;
+	int minute=0;
 	char complex_path[100],garbage[100];
 	//load worker 
 	FILE *workers_hour;
@@ -513,19 +512,37 @@ void Overtime_all(){
 			//open badge file fo read
 			workers_hour=fopen(complex_path,"r");
 			
-			for(e=0;e<workers_days;e++){
-				
+			fseek(workers_hour,18,0);
+			
+			for(e=0;e<workers_days-1;e++){
+				if(e==5 || e==6 || e==12 || e==13 || e==19 || e==20 || e==26 || e==27){
+					//skip name of day
+					fscanf(workers_hour,"%s",garbage);
+				}else{
+					//---------parser start
+					//skip name of day
+					fscanf(workers_hour,"%s",garbage);
+					//skip entrance
+					fscanf(workers_hour,"%s",garbage);
+					//skip divider
+					fscanf(workers_hour,"%s",garbage);
+					//skip exit
+					fscanf(workers_hour,"%s",garbage);
+					//skip declaration of minute
+					fscanf(workers_hour,"%s",garbage);
+					//skip declaration of minute
+					fscanf(workers_hour,"%s",garbage);
+					//skip declaration of minute
+					fscanf(workers_hour,"%s",garbage);	
+					//---------parser finish
+					//get total minute value
+					fscanf(workers_hour,"%d",&minute);
+					printf("%d\n",minute);	
+				}							
 			}
 		}
 	}
 }
-
-
-
-
-
-
-
 
 //function that calculate overtime of workers{the main program}
 void Overtime_menu(){

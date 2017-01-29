@@ -1,5 +1,6 @@
 Worker's day: 29
 
+
 Lunedi: 8.0 / 18.0
 Minute of work: 1560
 
@@ -23,8 +24,6 @@ Minute of work: 2016
 Sabato:-
 
 Domenica:-
-
-
 
 
 Lunedi: 10.0 / 13.0
@@ -51,6 +50,7 @@ Sabato:-
 
 Domenica:-
 
+
 Lunedi: 9.28 / 20.12
 Minute of work: 1780
 
@@ -74,6 +74,7 @@ Minute of work: 1514
 Sabato:-
 
 Domenica:-
+
 
 Lunedi: 9.56 / 13.42
 Minute of work: 1418
