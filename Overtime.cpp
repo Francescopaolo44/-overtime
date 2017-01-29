@@ -261,7 +261,8 @@ void DBMS_menu(){
 void Badge(){
 	int id,day=0,check_day=0;
 	char complex_path[100],read_day[100];
-	float entrance=0,exit=0;
+	char check_entrance=0,check_exit=0;
+	int entrance_H=0,entrance_M=0,exit_H=0,exit_M=0;
 	
 	FILE *workers_badge;
 	
@@ -309,24 +310,57 @@ void Badge(){
 				fprintf(workers_badge,"\n\nDomenica:-");
 			}
 			if(check_day==1){
-				//set green				
-				system("color 2F");
 				
-				//entrance
-				printf("Insert Entrance Hour: [hh.mm]");
-				scanf("%f",&entrance);
+				//check correct hour for entrance and exit
+				do{
+					//set green				
+					system("color 2F");
+					
+					//entrance hour
+					printf("Insert Entrance Hour: [hh]");
+					scanf("%d",&entrance_H);
+					
+					//entrance minute
+					printf("Insert Entrance Minute: [mm]");
+					scanf("%d",&entrance_M);
+					
+					//check right hour
+					if(entrance_H>=0 && entrance_H<=23){
+						check_entrance=1;
+					}
+					
+					//set red				
+					system("color 4F");
+					
+					//exit hour
+					printf("Insert Exit Hour: [hh]");
+					scanf("%d",&exit_H);
+					
+					//exit minute
+					printf("Insert Exit Hour: [mm]");
+					scanf("%d",&exit_M);
+					
+					//check right hour
+					if(exit_H>=0 && entrance_M<=59){
+						check_exit=1;
+					}
+				}while(check_entrance==0 && check_exit==0);
 				
-				//set red				
-				system("color 4F");
+				//print entrance
+				fprintf(workers_badge,"%d",entrance_H);
+				fprintf(workers_badge,".");
+				fprintf(workers_badge,"%d",entrance_M);
 				
-				//exit
-				printf("Insert Exit Hour: [hh.mm]");
-				scanf("%f",&exit);
+				//space
+				fprintf(workers_badge," ");
+				fprintf(workers_badge,"/");
+				fprintf(workers_badge," ");		
 				
-				//print entrance and exit
-				fprintf(workers_badge,"%0.2f",entrance);
-				fprintf(workers_badge," / ");
-				fprintf(workers_badge,"%0.2f",exit);
+				//print exit
+				fprintf(workers_badge,"%d",exit_H);
+				fprintf(workers_badge,".");
+				fprintf(workers_badge,"%d\n",exit_M);
+				
 				day++;
 			}else{
 				printf("Weekend man!");
@@ -351,6 +385,30 @@ void Badge(){
 	system("color 3F");
 }
 
+//function that print all worker's hour
+void Badge_print(){
+	int id;
+	char complex_path[100],read_hour[100];
+	
+	FILE *workers_badge;
+	
+	printf("Insert badge ID: ");
+	scanf("%d",&id);
+	sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
+	
+	//open badge file fo read
+	workers_badge=fopen(complex_path,"r");
+	
+	if(workers_badge == NULL){
+		printf("\nFile doesn't exist.Have you ever add this worker in the database?");
+	}else{
+		while(fscanf(workers_badge,"%s",read_hour) > 0){
+			printf("%s",read_hour);
+		}
+	}
+	
+}
+
 //function that simulate a Electronic Badge
 void Badge_menu(){
 	int scelta=1,risposta;
@@ -360,14 +418,17 @@ void Badge_menu(){
 		system("cls");
 		printf("\nWelcome Worker\n\n");
 		printf("\nChoose an action: \n");
-		printf("|1)Badge |\n");
-		printf("|2)Print  Workers Badge  |\n");	
+		printf("|1)Badge                 |\n");
+		printf("|2)Print Workers Badge   |\n");	
 		printf("\nInsert action: ");
 		scanf("%d",&risposta);
 				
 		switch (risposta){
 				
 			case 1: Badge();
+					break;
+			
+			case 2: Badge_print();
 					break;
 					
 			default: "wrong action";
