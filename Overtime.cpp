@@ -22,8 +22,9 @@ Linguaggio:C*/
 #include <string.h>
 
 //---------------------------constant--------------------------
-#define number_of_workers = 10;
-#define days_of_works = 20;
+const int number_of_workers = 10;
+const int days_of_works = 28;
+
 //---------------------------structure--------------------------
 typedef struct{
 	int id; /*AUTO INCREMENT */
@@ -73,7 +74,7 @@ void DBMS_add(FILE *config){
 	fclose(config);
 	
 	do{
-		if(workers<number_of_workers){
+		if(workers < number_of_workers){
 			check_load=1;
 		}else{
 			printf("You have reached max number of workers.");
@@ -258,34 +259,81 @@ void DBMS_menu(){
 
 //-------------------------BADGE--------------------------------------------------
 void Badge_entrance(){
-	int id,day;
+	int id,day,check_day=0;
 	char complex_path[100],entrance[100],read_day[100];
 	
 	FILE *workers_badge;
 	
-	printf("Inserisci id badge: ");
+	printf("Insert badge ID: ");
 	scanf("%d",&id);
 	sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
 	
-	//open badge file
-	workers_badge=fopen(complex_path,"r+");
+	//open badge file fo read
+	workers_badge=fopen(complex_path,"r");
 	
 	//read worker's day
 	fseek(workers_badge,14,0);
 	fscanf(workers_badge,"%d",&day);
 	
+	fclose(workers_badge);
+	
+	//open file for appendin hour and update day
+	workers_badge=fopen(complex_path,"a");
+	
 	if(workers_badge == NULL){
 		printf("\nFile doesn't exist.Have you ever add this worker in the database?");
 	}else{
+		
 		if(day < days_of_works){
-			printf("Insert Entrance Hour: [hh mm]");
-			//empty get for send button
-			getchar();
-			gets(entrance);
-			fprintf(workers_badge,"%s",entrance);
-			fprintf(workers_badge,"/");
+		
+			//print day
+			if(day == 1 || day == 8 || day == 15 || day == 22){
+				fprintf(workers_badge,"\n\nLunedi: ");
+				check_day=1;
+			}else if(day == 2 || day == 9 || day == 16 || day == 23){
+				fprintf(workers_badge,"\n\nMartedì: ");
+				check_day=1;
+			}else if(day == 3 || day == 10 || day == 17 || day == 24){
+				fprintf(workers_badge,"\n\nMercoledì: ");
+				check_day=1;
+			}else if(day == 4 || day == 11 || day == 18 || day == 25){
+				fprintf(workers_badge,"\n\nGiovedì: ");
+				check_day=1;				
+			}else if(day == 5 || day == 12 || day == 19 || day == 26){
+				fprintf(workers_badge,"\n\nVenerdì: ");
+				check_day=1;				
+			}else if(day == 6 || day == 13 || day == 20 || day == 27){
+				fprintf(workers_badge,"\n\nSabato:-");
+			}else{
+				fprintf(workers_badge,"\n\nDomenica:-");
+			}
+			if(check_day==1){
+				printf("Insert Entrance Hour: [hh mm]");
+				//empty get for send button
+				getchar();
+				gets(entrance);
+				//print entrance
+				fprintf(workers_badge,"%s",entrance);
+				fprintf(workers_badge,"/");
+				day++;
+			}else{
+				printf("Weekend man!");
+				day++;
+			}
+		}else{
+			printf("You have worked all 20 days.C'mon man take a little vacation. ");
 		}
 	}
+	//close badge in append mode
+	fclose(workers_badge);
+	
+	//update days of works
+	workers_badge=fopen(complex_path,"r+");
+	fseek(workers_badge,14,0);
+	fprintf(workers_badge,"%d",day);
+	
+	//close badge in append mode
+	fclose(workers_badge);
 }
 
 //function that simulate a Electronic Badge
@@ -310,7 +358,7 @@ void Badge_menu(){
 					
 			default: "wrong action";
 		}
-		printf("\n\nContinue with DBMS?:(S=1/N=0) ");
+		printf("\n\nContinue with Badge?:(S=1/N=0) ");
 		scanf("%d",&scelta);
 	}
 }
