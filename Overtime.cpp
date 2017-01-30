@@ -20,6 +20,7 @@ Linguaggio:C*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 //---------------------------constant--------------------------
 const int number_of_workers = 10;
@@ -599,10 +600,6 @@ void Overtime_menu(){
 	}
 }
 
-
-
-
-
 void menu (){
 	
 	int risposta,scelta=1;
@@ -640,17 +637,53 @@ void menu (){
 
 //launch screen
 void launch_screen(){
+	system("color 1A");
+	int i;
+	printf("                            @####     \n");       
+    printf("                       @#####         \n");    
+    printf("                      ###             \n");   
+    printf("                     @##              \n");     
+    printf("                  @@###   @@@@@       \n");     
+    printf("                 @####:   #####@      \n");     
+    printf("                     ##;      @#@     \n");     
+    printf("                      ##'      @#@    \n");     
+    printf("                       ##@@@@   @#@@@@\n");     
+    printf("                        #####   ,###@ \n");     
+    printf("                               ,##    \n");     
+    printf("                              ;##     \n");     
+	printf("                         @@@@##       \n");    
+    printf("                          #####     \n\n");
+	printf(" _____            _   _      _     _____           _                 \n");                
+	printf("/  __ |          | | | |    | |   /  ___|         | |                \n");             
+	printf("| /  |/_ __ _   _| |_| | ___| |_  | `--.__   _ ___| |_ ___ _ __ ___  \n");  
+	printf("| |   | '__| | | |      / _ | __| `--. |  | | / __| __/ _ | '_ ` _  |\n");  
+	printf("| |__/| |  | |_| | ||  | |__/ |_  /|__/ _ |_| |__ | ||  __/ | | | | |\n"); 
+	printf("|____/|_|  |__,  |_||__/|___||__| |____/ |__, |___/___|___|_| |_| |_|\n"); 
+	printf("            __/ |                        __/ |                       \n");                       
+	printf("            |___/                        |___/                       \n\n");             
 	
+	printf("Crynet System version 1.0\n\n");
+	printf("Copyright Dellaquila Francesco Paolo\n");
+	printf("                                          {Don't touch the window}\n\n");
+	printf("                                                   Loading");
+	
+	for(i=0;i<5;i++){
+		printf(".");
+		//sleep
+		sleep(1);
+	}        
 }
 //---------------------------main--------------------------------
 int main(){
 	
 	//initialize design
-	system("color 3F");
 	system("title Overtime Project by D.F.P");
 
 	//loading screen
 	launch_screen();
+	
+	//default color
+	system("color 3F");
 	
 	//call menu
 	menu();
