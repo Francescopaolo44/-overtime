@@ -395,7 +395,7 @@ void Badge(){
 				fprintf(workers_badge,"%d\n",exit_M);
 				
 				//calculate total of minute
-				total_m = total_m_exit + total_m_entrance;
+				total_m = total_m_exit - total_m_entrance;
 				
 				//print minute of work
 				fprintf(workers_badge,"Minute of work: ");

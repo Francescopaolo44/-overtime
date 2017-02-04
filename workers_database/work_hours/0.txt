@@ -2,23 +2,23 @@ Worker's day: 29
 
 
 Lunedi: 8.0 / 18.0
-Minute of work: 1560
+Minute of work: 600
 
 
 Martedì: 10.15 / 19.27
-Minute of work: 1782
+Minute of work: 552
 
 
 Mercoledì: 9.57 / 18.0
-Minute of work: 1677
+Minute of work: 483
 
 
 Giovedì: 0.15 / 5.12
-Minute of work: 327
+Minute of work: 297
 
 
 Venerdì: 12.34 / 21.2
-Minute of work: 2016
+Minute of work: 508
 
 
 Sabato:-
@@ -31,19 +31,19 @@ Minute of work: 180
 
 
 Martedì: 8.0 / 12.34
-Minute of work: 1234
+Minute of work: 274
 
 
 Mercoledì: 9.45 / 17.34
-Minute of work: 1639
+Minute of work: 469
 
 
 Giovedì: 3.34 / 7.28
-Minute of work: 662
+Minute of work: 234
 
 
 Venerdì: 14.59 / 17.34
-Minute of work: 1953
+Minute of work: 155
 
 
 Sabato:-
@@ -52,23 +52,23 @@ Domenica:-
 
 
 Lunedi: 9.28 / 20.12
-Minute of work: 1780
+Minute of work: 644
 
 
 Martedì: 8.15 / 12.43
-Minute of work: 1258
+Minute of work: 268
 
 
 Mercoledì: 10.12 / 20.21
-Minute of work: 1833
+Minute of work: 609
 
 
 Giovedì: 2.21 / 9.0
-Minute of work: 681
+Minute of work: 399
 
 
 Venerdì: 10.14 / 15.0
-Minute of work: 1514
+Minute of work: 286
 
 
 Sabato:-
@@ -77,23 +77,23 @@ Domenica:-
 
 
 Lunedi: 9.56 / 13.42
-Minute of work: 1418
+Minute of work: 226
 
 
 Martedì: 8.30 / 13.0
-Minute of work: 1290
+Minute of work: 270
 
 
 Mercoledì: 10.37 / 14.23
-Minute of work: 1500
+Minute of work: 226
 
 
 Giovedì: 5.23 / 9.30
-Minute of work: 893
+Minute of work: 247
 
 
 Venerdì: 12.0 / 14.26
-Minute of work: 1586
+Minute of work: 146
 
 
 Sabato:-
