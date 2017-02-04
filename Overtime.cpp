@@ -24,8 +24,9 @@ Linguaggio:C*/
 
 //---------------------------constant--------------------------
 const int number_of_workers = 10;
-const int days_of_works = 29;
-const int compulsory_hours = 40;
+const int days_of_works = 28;
+const int compulsory_hours_week = 40;
+const int compulsory_hours_month = 160;
 
 //---------------------------structure--------------------------
 typedef struct{
@@ -303,7 +304,7 @@ void Badge(){
 		//open file for appendin hour and update day
 		workers_badge=fopen(complex_path,"a");
 		
-		if(day < days_of_works){
+		if(day <= days_of_works){
 		
 			//print day
 			if(day == 1 || day == 8 || day == 15 || day == 22){
@@ -482,8 +483,15 @@ void Badge_menu(){
 void Overtime_all(){
 	int workers=0,i,e,week=0,id=0,workers_days=0;
 	int minute=0,total=0,total_minute[4],overtime=0;
-	int compulsory=0,extra=0,extra_hour=0;
+	int compulsory_week=0,compulsory_month=0,extra=0,extra_hour=0;
 	char complex_path[100],garbage[100];
+	
+	//transform constant hour of work in minutes
+	//week
+	compulsory_week=calculate_minute_work(compulsory_hours_week);
+	//month
+	compulsory_month=calculate_minute_work(compulsory_hours_month);
+
 	//load worker 
 	FILE *workers_hour;
 	
@@ -492,6 +500,7 @@ void Overtime_all(){
 	
 	//open config.ini
 	config = fopen("settings/config.ini","r");
+
 			
 	if(config == NULL){
 		printf("\nOps....you delete or move config.ini file. Please restart the program in the same folder of settings/config.ini");
@@ -500,75 +509,82 @@ void Overtime_all(){
 		fseek(config,93,0);
 		fscanf(config,"%d",&workers);
 		
-		//close config
-		fclose(config);
+		//check 0 workers
+		if(workers==0){
+			printf("No workers. Have you ever add to the database?");
+		}else{
+			//close config
+			fclose(config);
+			
+			//open correct file for each workers
+			for(i=0;i<workers;i++){
+				//open workers_hours
+				sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
 		
-		//open correct file for each workers
-		for(i=0;i<workers;i++){
-			//open workers_hours
-			sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
-	
-			//open badge file fo read
-			workers_hour=fopen(complex_path,"r");
+				//open badge file fo read
+				workers_hour=fopen(complex_path,"r");
+				
+				//read worker days
+				fseek(workers_hour,14,0);
+				fscanf(workers_hour,"%d",&workers_days);
 			
-			//read worker days
-			fseek(workers_hour,14,0);
-			fscanf(workers_hour,"%d",&workers_days);
-		
-			//close workers_hour
-			fclose(workers_hour);
-			
-			//open badge file fo read
-			workers_hour=fopen(complex_path,"r");
-			
-			fseek(workers_hour,18,0);
-			
-			for(e=0;e<workers_days-1;e++){
-				if(e==5 || e==6 || e==12 || e==13 || e==19 || e==20 || e==26 || e==27){
-					//skip name of day
-					fscanf(workers_hour,"%s",garbage);
+				//close workers_hour
+				fclose(workers_hour);
+				
+				//open badge file fo read
+				workers_hour=fopen(complex_path,"r");
+				
+				fseek(workers_hour,18,0);
+				
+				for(e=0;e<workers_days-1;e++){
+					if(e==5 || e==6 || e==12 || e==13 || e==19 || e==20 || e==26 || e==27){
+						//skip name of day
+						fscanf(workers_hour,"%s",garbage);
+					}else{
+						//---------parser start
+						//skip name of day
+						fscanf(workers_hour,"%s",garbage);
+						//skip entrance
+						fscanf(workers_hour,"%s",garbage);
+						//skip divider
+						fscanf(workers_hour,"%s",garbage);
+						//skip exit
+						fscanf(workers_hour,"%s",garbage);
+						//skip declaration of minute
+						fscanf(workers_hour,"%s",garbage);
+						//skip declaration of minute
+						fscanf(workers_hour,"%s",garbage);
+						//skip declaration of minute
+						fscanf(workers_hour,"%s",garbage);	
+						//---------parser finish
+						//get total minute value
+						fscanf(workers_hour,"%d",&minute);
+						total+=minute;
+						if(e==4 || e==11 || e==18 || e==25){
+							if(total>=compulsory_week){
+								total_minute[week]=total;
+							}else{
+								total_minute[week]=0;
+							}
+							total=0;
+							week++;
+						}
+					}							
+				}
+				for(week=0;week<4;week++){
+					overtime += total_minute[week];
+				}
+				//check overtime
+				if(overtime < compulsory_month){
+					printf("This worker, id:%d, work fewer hours than 160.",i);
+				}else if(overtime == compulsory_month){
+					printf("This worker, id:%d, work 160 hours.",i);
 				}else{
-					//---------parser start
-					//skip name of day
-					fscanf(workers_hour,"%s",garbage);
-					//skip entrance
-					fscanf(workers_hour,"%s",garbage);
-					//skip divider
-					fscanf(workers_hour,"%s",garbage);
-					//skip exit
-					fscanf(workers_hour,"%s",garbage);
-					//skip declaration of minute
-					fscanf(workers_hour,"%s",garbage);
-					//skip declaration of minute
-					fscanf(workers_hour,"%s",garbage);
-					//skip declaration of minute
-					fscanf(workers_hour,"%s",garbage);	
-					//---------parser finish
-					//get total minute value
-					fscanf(workers_hour,"%d",&minute);
-					total+=minute;
-					if(e==4 || e==11 || e==18 || e==25){
-						total_minute[week]=total;
-						printf("%d\n",total_minute[week]);
-						total=0;
-						week++;
-					}
-				}							
-			}
-			for(week=0;week<4;week++){
-				overtime += total_minute[week];
-			}
-			compulsory = calculate_minute_work(compulsory_hours);
-			//check overtime
-			if(overtime < compulsory){
-				printf("This workers, work fewer hours than 40.");
-			}else if(overtime == compulsory){
-				printf("This workers, work 40 hours.");
-			}else{
-				extra = overtime - compulsory;
-				extra_hour = calculate_hour_work(extra);
-				printf("You must pay %d hour of overtime.",extra_hour);
-			}
+					extra = overtime - compulsory_month;
+					extra_hour = calculate_hour_work(extra);
+					printf("For this worker,id:%d, You must pay %d hour of overtime.",id,extra_hour);
+				}
+			}			
 		}
 	}
 }
@@ -662,7 +678,7 @@ void launch_screen(){
 	
 	printf("Crynet System version 1.0\n\n");
 	printf("Copyright Dellaquila Francesco Paolo\n");
-	printf("                                          {Don't touch the window}\n\n");
+	printf("                       {Don't touch the window until the loading finish or reload program}\n\n");
 	printf("                                                   Loading");
 	
 	for(i=0;i<5;i++){
