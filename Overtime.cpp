@@ -49,7 +49,6 @@ void DBMS_add(FILE *config){
 	char data[100],complex_path[100];
 	int i=0,check_load=0,check_exit=0;
 	int workers=0,response=1;
-	long int position=0;
 	
 	
 	//open in "a" mode to add workers
@@ -62,7 +61,6 @@ void DBMS_add(FILE *config){
 	while(fscanf(config,"%s",data) > 0){
 		if(strcmp("workers:",data) == 0){
 			fscanf(config,"%d",&workers);
-			position=ftell(config);
 		}
 	}
 	
@@ -131,7 +129,7 @@ void DBMS_add(FILE *config){
 	//move near number
 	fseek(config,93,0);
 	//update
-	fprintf(config,"%d\b",workers);
+	fprintf(config,"%d",workers);
 	fprintf(config,"\n");
 	//close config && workers_list
 	fclose(config);
