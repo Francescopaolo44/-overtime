@@ -265,11 +265,11 @@ int calculate_minute_work (int entrance_H){
 	return minute;
 }
 //function that transform minute value in hour
-int calculate_hour_work (int minute){
-	int hour=0;
+float calculate_hour_work (int minute){
+	float hour;
 	
 	//calculate hour
-	hour = minute / 60;
+	hour = minute / 60.0;
 	
 	return hour;
 }
@@ -483,7 +483,8 @@ void Badge_menu(){
 void Overtime_all(){
 	int workers=0,i,e,week=0,workers_days=0;
 	int minute=0,total=0,total_minute[4],overtime=0;
-	int compulsory_week=0,compulsory_month=0,extra=0,extra_hour=0;
+	int compulsory_week=0,compulsory_month=0,extra=0;
+	float extra_hour=0;
 	char complex_path[100],garbage[100];
 	
 	//transform constant hour of work in minutes
@@ -518,6 +519,13 @@ void Overtime_all(){
 			
 			//open correct file for each workers
 			for(i=0;i<workers;i++){
+				
+				//initialize component for calculation
+				week=0;
+				total=0;
+				total_minute[0,0,0,0];
+				overtime=0;
+				
 				//open workers_hours
 				sprintf(complex_path,"workers_database/work_hours/%d.txt",i);
 		
@@ -573,7 +581,7 @@ void Overtime_all(){
 								week++;
 							}
 						}							
-					}
+					}													
 					for(week=0;week<4;week++){
 						overtime += total_minute[week];
 					}
@@ -585,7 +593,7 @@ void Overtime_all(){
 					}else{
 						extra = overtime - compulsory_month;
 						extra_hour = calculate_hour_work(extra);
-						printf("\nFor this worker,id:%d, You must pay %d hour of overtime.\n",i,extra_hour);
+						printf("\nFor this worker,id:%d, You must pay about %0.2f hour of overtime.\n",i,extra_hour);
 					}					
 				}
 			}			
