@@ -1,22 +1,5 @@
 //Informatic project Dellaquila #1
 
-/*realizzare un porgramma che:
-calcoli le ore di straordinario effettuate dai 10 dipendenti dell'azienda Creasis.
-I dipendenti sono tenuti a lavorare 40 ore settimanali in 5 giorni (DA LUNEDI A VENERDI) e ogni giorno badgiano all'entrata e all'uscita.
-Alla fine del mese(di 28 giorni)l'ufficio delle risorse umane, deve sapere quanto ore di straordinario deve pagare a ciascun dipendente.
-
-Tesina
-
--traccia
--analisi dei dati
--definizione delle strutture dati
--strategia risolutiva
--codice 
--output(videata)
-
-Termine:Mercoledì 2
-Linguaggio:C*/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
