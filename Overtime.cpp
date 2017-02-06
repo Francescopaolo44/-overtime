@@ -48,8 +48,7 @@ void DBMS_add(FILE *config){
 	FILE *workers_badge;
 	
 	char data[100],complex_path[100];
-	int i=0,check_load=0,check_exit=0;
-	int workers=0,response=1;
+	int check_load=0,workers=0,response=1;
 	
 	
 	//open in "a" mode to add workers
@@ -189,7 +188,7 @@ void DBMS_print(){
 //function that simulate a DBMS (Database Management System) to manage all workers in industry
 void DBMS_menu(){
 	
-	int risposta,scelta=1,check_data=0,i;
+	int response,choice=1,check_data=0,i;
 	char username[100],password[100],read_file[100];
 	
 	//load config.ini
@@ -223,7 +222,7 @@ void DBMS_menu(){
 		if(check_data!=1){
 			printf("\nUsername or password is incorrect.");
 		}else{
-			while(scelta!=0){
+			while(choice!=0){
 				//clean screen
 				system("cls");
 				printf("\nWelcome Admin\n\n");
@@ -232,9 +231,9 @@ void DBMS_menu(){
 				printf("|2)Search Workers   |\n");
 				printf("|3)Print  Workers   |\n");	
 				printf("\nInsert action: ");
-				scanf("%d",&risposta);
+				scanf("%d",&response);
 				
-				switch (risposta){
+				switch (response){
 				
 					case 1: DBMS_add(config);
 					break;
@@ -248,7 +247,7 @@ void DBMS_menu(){
 					default: printf("wrong action");
 				}
 				printf("\n\nContinue with DBMS?:(S=1/N=0) ");
-				scanf("%d",&scelta);
+				scanf("%d",&choice);
 			}
 		}
 	}
@@ -277,8 +276,8 @@ int calculate_hour_work (int minute){
 //function that to specific id file entrance and exit
 void Badge(){
 	int id,day=0,check_day=0;
-	char complex_path[100],read_day[100];
-	char check_entrance=0,check_exit=0;
+	char complex_path[100];
+	int check_entrance=0,check_exit=0;
 	int entrance_H=0,entrance_M=0,exit_H=0,exit_M=0;
 	int total_m_entrance=0,total_m_exit=0,minute_H=0,total_m=0;
 	
@@ -447,14 +446,15 @@ void Badge_print(){
 			printf("%s\n",read_hour);
 		}
 	}
-	
+	//close file
+	fclose(workers_badge);
 }
 
 //function that simulate an Electronic Badge
 void Badge_menu(){
-	int scelta=1,risposta=0;
+	int choice=1,response=0;
 	
-	while(scelta!=0){
+	while(choice!=0){
 		//clean screen
 		system("cls");
 		printf("\nWelcome Worker\n\n");
@@ -462,9 +462,9 @@ void Badge_menu(){
 		printf("|1)Badge                 |\n");
 		printf("|2)Print Workers Badge   |\n");	
 		printf("\nInsert action: ");
-		scanf("%d",&risposta);
+		scanf("%d",&response);
 				
-		switch (risposta){
+		switch (response){
 				
 			case 1: Badge();
 					break;
@@ -475,13 +475,13 @@ void Badge_menu(){
 			default: printf("wrong action");
 		}
 		printf("\n\nContinue with Badge?:(S=1/N=0) ");
-		scanf("%d",&scelta);
+		scanf("%d",&choice);
 	}
 }
 
 //overtime of all workers
 void Overtime_all(){
-	int workers=0,i,e,week=0,id=0,workers_days=0;
+	int workers=0,i,e,week=0,workers_days=0;
 	int minute=0,total=0,total_minute[4],overtime=0;
 	int compulsory_week=0,compulsory_month=0,extra=0,extra_hour=0;
 	char complex_path[100],garbage[100];
@@ -519,7 +519,7 @@ void Overtime_all(){
 			//open correct file for each workers
 			for(i=0;i<workers;i++){
 				//open workers_hours
-				sprintf(complex_path,"workers_database/work_hours/%d.txt",id);
+				sprintf(complex_path,"workers_database/work_hours/%d.txt",i);
 		
 				//open badge file fo read
 				workers_hour=fopen(complex_path,"r");
@@ -531,58 +531,62 @@ void Overtime_all(){
 				//close workers_hour
 				fclose(workers_hour);
 				
-				//open badge file fo read
-				workers_hour=fopen(complex_path,"r");
-				
-				fseek(workers_hour,18,0);
-				
-				for(e=0;e<workers_days-1;e++){
-					if(e==5 || e==6 || e==12 || e==13 || e==19 || e==20 || e==26 || e==27){
-						//skip name of day
-						fscanf(workers_hour,"%s",garbage);
-					}else{
-						//---------parser start
-						//skip name of day
-						fscanf(workers_hour,"%s",garbage);
-						//skip entrance
-						fscanf(workers_hour,"%s",garbage);
-						//skip divider
-						fscanf(workers_hour,"%s",garbage);
-						//skip exit
-						fscanf(workers_hour,"%s",garbage);
-						//skip declaration of minute
-						fscanf(workers_hour,"%s",garbage);
-						//skip declaration of minute
-						fscanf(workers_hour,"%s",garbage);
-						//skip declaration of minute
-						fscanf(workers_hour,"%s",garbage);	
-						//---------parser finish
-						//get total minute value
-						fscanf(workers_hour,"%d",&minute);
-						total+=minute;
-						if(e==4 || e==11 || e==18 || e==25){
-							if(total>=compulsory_week){
-								total_minute[week]=total;
-							}else{
-								total_minute[week]=0;
-							}
-							total=0;
-							week++;
-						}
-					}							
-				}
-				for(week=0;week<4;week++){
-					overtime += total_minute[week];
-				}
-				//check overtime
-				if(overtime < compulsory_month){
-					printf("This worker, id:%d, work fewer hours than 160.",i);
-				}else if(overtime == compulsory_month){
-					printf("This worker, id:%d, work 160 hours.",i);
+				if(workers_days<29){
+					printf("\nThe software can't calculate overtime for this workers because he doesn't work all 20 days.\n");
 				}else{
-					extra = overtime - compulsory_month;
-					extra_hour = calculate_hour_work(extra);
-					printf("For this worker,id:%d, You must pay %d hour of overtime.",id,extra_hour);
+					//open badge file fo read
+					workers_hour=fopen(complex_path,"r");
+					
+					fseek(workers_hour,18,0);
+					
+					for(e=0;e<workers_days-1;e++){
+						if(e==5 || e==6 || e==12 || e==13 || e==19 || e==20 || e==26 || e==27){
+							//skip name of day
+							fscanf(workers_hour,"%s",garbage);
+						}else{
+							//---------parser start
+							//skip name of day
+							fscanf(workers_hour,"%s",garbage);
+							//skip entrance
+							fscanf(workers_hour,"%s",garbage);
+							//skip divider
+							fscanf(workers_hour,"%s",garbage);
+							//skip exit
+							fscanf(workers_hour,"%s",garbage);
+							//skip declaration of minute
+							fscanf(workers_hour,"%s",garbage);
+							//skip declaration of minute
+							fscanf(workers_hour,"%s",garbage);
+							//skip declaration of minute
+							fscanf(workers_hour,"%s",garbage);	
+							//---------parser finish
+							//get total minute value
+							fscanf(workers_hour,"%d",&minute);
+							total+=minute;
+							if(e==4 || e==11 || e==18 || e==25){
+								if(total>=compulsory_week){
+									total_minute[week]=total;
+								}else{
+									total_minute[week]=0;
+								}
+								total=0;
+								week++;
+							}
+						}							
+					}
+					for(week=0;week<4;week++){
+						overtime += total_minute[week];
+					}
+					//check overtime
+					if(overtime < compulsory_month){
+						printf("\nThis worker, id:%d, work fewer hours than 160.\n",i);
+					}else if(overtime == compulsory_month){
+						printf("\nThis worker, id:%d, work 160 hours.\n",i);
+					}else{
+						extra = overtime - compulsory_month;
+						extra_hour = calculate_hour_work(extra);
+						printf("\nFor this worker,id:%d, You must pay %d hour of overtime.\n",i,extra_hour);
+					}					
 				}
 			}			
 		}
@@ -591,18 +595,18 @@ void Overtime_all(){
 
 //function that calculate overtime of workers{the main program}
 void Overtime_menu(){
-	int scelta=1,risposta;
+	int choice=1,response;
 	
-	while(scelta!=0){
+	while(choice!=0){
 		//clean screen
 		system("cls");
 		printf("\nWelcome Worker\n\n");
 		printf("\nChoose an action: \n");
 		printf("|1)Overtime [ALL] workers |\n");
 		printf("\nInsert action: ");
-		scanf("%d",&risposta);
+		scanf("%d",&response);
 				
-		switch (risposta){
+		switch (response){
 				
 			case 1: Overtime_all();
 					break;
@@ -610,15 +614,15 @@ void Overtime_menu(){
 			default: printf("wrong action");
 		}
 		printf("\n\nContinue with Overtime?:(S=1/N=0) ");
-		scanf("%d",&scelta);
+		scanf("%d",&choice);
 	}
 }
 
 void menu (){
 	
-	int risposta,scelta=1;
+	int response,choice=1;
 	
-	while(scelta!=0){
+	while(choice!=0){
 		//clean screen
 		system("cls");
 		
@@ -629,9 +633,9 @@ void menu (){
 		printf("---------------------|\n");
 		printf("|3)OVERTIME          |\n");
 		printf("\nInsert action: ");
-		scanf("%d",&risposta);
+		scanf("%d",&response);
 		
-		switch (risposta){
+		switch (response){
 		
 			case 1: DBMS_menu();
 			break;
@@ -645,7 +649,7 @@ void menu (){
 			default: printf("wrong action");
 		}
 		printf("\n\nContinue with Menu?:(S=1/N=0) ");
-		scanf("%d",&scelta);
+		scanf("%d",&choice);
 	}
 }
 
